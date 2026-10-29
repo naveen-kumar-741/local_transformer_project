@@ -1,0 +1,30 @@
+{
+  "run_name": "demo",
+  "data_dir": "data/processed",
+  "tokenizer_dir": "data/processed/tokenizer",
+  "out_dir": "checkpoints",
+  "batch_size": 1,
+  "gradient_accumulation_steps": 2,
+  "max_steps": 100,
+  "eval_interval": 20,
+  "eval_batches": 3,
+  "save_interval": 50,
+  "learning_rate": 0.0005,
+  "min_learning_rate": 5e-05,
+  "warmup_steps": 5,
+  "weight_decay": 0.1,
+  "grad_clip": 1.0,
+  "seed": 1337,
+  "precision": "fp16",
+  "device": "auto",
+  "model": {
+    "vocab_size": 256,
+    "block_size": 64,
+    "n_layer": 2,
+    "n_head": 2,
+    "n_embd": 64,
+    "dropout": 0.1,
+    "bias": true,
+    "gradient_checkpointing": false
+  }
+}

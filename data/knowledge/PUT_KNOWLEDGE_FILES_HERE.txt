@@ -1,0 +1,1 @@
+Add knowledge documents (.txt or .md) here before building the optional RAG index.

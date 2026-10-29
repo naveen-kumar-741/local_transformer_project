@@ -1,0 +1,13 @@
+torch>=2.5.0
+numpy>=1.26
+tokenizers>=0.20
+tensorboard>=2.18
+tqdm>=4.66
+fastapi>=0.115
+uvicorn>=0.32
+sentence-transformers>=3.3
+faiss-cpu>=1.9
+faster-whisper>=1.1
+sounddevice>=0.5
+soundfile>=0.12
+pyttsx3>=2.98
