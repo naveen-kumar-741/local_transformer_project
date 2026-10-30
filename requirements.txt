@@ -1,12 +1,23 @@
+# Core ML and Deep Learning
 torch>=2.5.0
 numpy>=1.26
 tokenizers>=0.20
 tensorboard>=2.18
 tqdm>=4.66
+
+# Dataset Handling
+datasets>=3.0
+huggingface-hub>=0.26
+
+# API and Backend
 fastapi>=0.115
 uvicorn>=0.32
+
+# RAG and Embeddings
 sentence-transformers>=3.3
 faiss-cpu>=1.9
+
+# Speech Recognition and Audio
 faster-whisper>=1.1
 sounddevice>=0.5
 soundfile>=0.12

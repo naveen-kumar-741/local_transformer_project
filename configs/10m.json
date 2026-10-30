@@ -1,7 +1,7 @@
 {
   "run_name": "10m",
-  "data_dir": "data/processed_bpe",
-  "tokenizer_dir": "data/processed_bpe/tokenizer",
+  "data_dir": "data/processed",
+  "tokenizer_dir": "data/processed/tokenizer",
   "out_dir": "checkpoints",
   "batch_size": 1,
   "gradient_accumulation_steps": 16,
