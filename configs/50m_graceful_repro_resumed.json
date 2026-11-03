@@ -1,0 +1,33 @@
+
+{
+  "run_name": "50m_graceful_repro_resumed",
+  "data_dir": "data/processed_bpe",
+  "tokenizer_dir": "data/processed_bpe/tokenizer",
+  "out_dir": "checkpoints",
+  "batch_size": 1,
+  "gradient_accumulation_steps": 16,
+  "max_steps": 40,
+  "eval_interval": 10,
+  "eval_batches": 10,
+  "save_interval": 40,
+  "log_interval": 5,
+  "learning_rate": 0.0003,
+  "min_learning_rate": 0.00003,
+  "warmup_steps": 200,
+  "weight_decay": 0.1,
+  "grad_clip": 1.0,
+  "seed": 1337,
+  "precision": "fp16",
+  "device": "auto",
+    "deterministic": true,
+  "model": {
+    "vocab_size": 8000,
+    "block_size": 256,
+    "n_layer": 9,
+    "n_head": 10,
+    "n_embd": 640,
+    "dropout": 0.1,
+    "bias": true,
+    "gradient_checkpointing": false
+  }
+}

@@ -19,7 +19,6 @@ class ModelConfig:
     @classmethod
     def from_dict(cls, data: dict[str, Any]):
         allowed = cls.__dataclass_fields__.keys()
-
         return cls(**{key: value for key, value in data.items() if key in allowed})
 
 
@@ -50,6 +49,10 @@ class TrainConfig:
     num_workers: int = 0
     device: str = "auto"
 
+    # Enables strict deterministic operations for reproducibility testing.
+    # Disabled by default to preserve normal training performance.
+    deterministic: bool = False
+
     model: dict[str, Any] | None = None
 
     @classmethod
@@ -57,11 +60,9 @@ class TrainConfig:
         data = json.loads(Path(path).read_text(encoding="utf-8"))
 
         model = data.pop("model", {})
-
         allowed = cls.__dataclass_fields__.keys()
 
         obj = cls(**{key: value for key, value in data.items() if key in allowed})
-
         obj.model = model
 
         return obj

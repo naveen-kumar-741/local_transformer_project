@@ -5,6 +5,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.checkpoint
 
+from torch.nn.attention import SDPBackend, sdpa_kernel
+
 from config import ModelConfig
 
 
@@ -66,14 +68,30 @@ class CausalSelfAttention(nn.Module):
             self.head_dim,
         ).transpose(1, 2)
 
-        y = F.scaled_dot_product_attention(
-            q,
-            k,
-            v,
-            attn_mask=None,
-            dropout_p=self.attn_drop.p if self.training else 0.0,
-            is_causal=True,
-        )
+        dropout_p = self.attn_drop.p if self.training else 0.0
+
+        if x.is_cuda and torch.are_deterministic_algorithms_enabled():
+            # Strict mode: explicitly use the math SDPA backend.
+            # Flash and memory-efficient SDPA are disabled here.
+            with sdpa_kernel(SDPBackend.MATH):
+                y = F.scaled_dot_product_attention(
+                    q,
+                    k,
+                    v,
+                    attn_mask=None,
+                    dropout_p=dropout_p,
+                    is_causal=True,
+                )
+        else:
+            # Normal fast path.
+            y = F.scaled_dot_product_attention(
+                q,
+                k,
+                v,
+                attn_mask=None,
+                dropout_p=dropout_p,
+                is_causal=True,
+            )
 
         y = y.transpose(1, 2).contiguous().view(batch_size, sequence_length, channels)
 
@@ -386,48 +404,38 @@ class GPTLanguageModel(nn.Module):
         self.eval()
 
         for _ in range(max_new_tokens):
-
-            # Keep only the most recent context tokens.
             idx_cond = idx[:, -self.cfg.block_size :]
 
             logits, _ = self(idx_cond)
 
-            # Use the last token's predictions.
             logits = logits[:, -1, :]
 
-            # Temperature sampling.
             logits = logits / temperature
 
-            # Repetition penalty.
             logits = self._apply_repetition_penalty(
                 logits,
                 idx,
                 repetition_penalty,
             )
 
-            # No-repeat n-gram.
             logits = self._apply_no_repeat_ngram(
                 logits,
                 idx,
                 no_repeat_ngram_size,
             )
 
-            # Top-k sampling.
             logits = self._apply_top_k(
                 logits,
                 top_k,
             )
 
-            # Top-p sampling.
             logits = self._apply_top_p(
                 logits,
                 top_p,
             )
 
-            # Convert logits into probabilities.
             probs = F.softmax(logits, dim=-1)
 
-            # Sample the next token.
             next_id = torch.multinomial(
                 probs,
                 num_samples=1,
