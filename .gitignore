@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 data/raw/*
 data/processed/*
+data/processed_bpe/*
 checkpoints/*
 runs/*
 .env

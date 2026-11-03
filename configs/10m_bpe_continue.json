@@ -1,0 +1,32 @@
+
+{
+  "run_name": "10m_bpe",
+  "data_dir": "data/processed_bpe",
+  "tokenizer_dir": "data/processed_bpe/tokenizer",
+  "out_dir": "checkpoints",
+  "batch_size": 1,
+  "gradient_accumulation_steps": 16,
+  "max_steps": 20000,
+  "eval_interval": 500,
+  "eval_batches": 10,
+  "save_interval": 500,
+  "log_interval": 10,
+  "learning_rate": 0.00001,
+  "min_learning_rate": 0.000003,
+  "warmup_steps": 0,
+  "weight_decay": 0.1,
+  "grad_clip": 1.0,
+  "seed": 1337,
+  "precision": "fp16",
+  "device": "auto",
+  "model": {
+    "vocab_size": 8000,
+    "block_size": 256,
+    "n_layer": 4,
+    "n_head": 4,
+    "n_embd": 256,
+    "dropout": 0.1,
+    "bias": true,
+    "gradient_checkpointing": false
+  }
+}
